@@ -17,14 +17,14 @@
 	</tr>
 	<c:forEach items="${list }" var="g">
 		<tr>
-			<%-- <td>${g.id }</td> --%>
+			<td>${g.id }</td>
 			<td>${g.name }</td>
 			<td>${g.price }</td>
 			<td>${g.baifen }</td>
 		</tr>
 	</c:forEach>
-	<a href="${pageContext.request.contextPath }/findAll?page=${prePage}"></a>
-	<a href="${pageContext.request.contextPath }/findAll?page=${nextPage}"></a>
 </table>
+	<a href="${pageContext.request.contextPath }/findAll?page=${prePage}">上一页</a>
+	<a href="${pageContext.request.contextPath }/findAll?page=${nextPage}">下一页</a>
 </body>
 </html>

@@ -1,7 +1,12 @@
 package com.wangtao.week2;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -12,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.wangtao.common.utils.StreamUtil;
+import com.wangtao.common.utils.StringUtil;
 import com.wangtao.week2.domain.Goods;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,51 +27,85 @@ public class RedisTest {
 	@Autowired
 	RedisTemplate redisTemplate;
 	
-	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void RedisList() {
-		String string = StreamUtil.readTextFile(new File("E:\\aaa.txt"));
-		String[] split = string.split("==");
+		File file = new File("src/test/resources/init.txt");
 		
-		ArrayList<Goods> list = new ArrayList<Goods>();
+		try {
+			InputStream is = new FileInputStream(file);
+			List<String> readTextForLine = StreamUtil.readTextForLine(is);
+			
+			for (String string : readTextForLine) {
+				Goods g = new Goods();
+				String[] split = string.split("==");
+				if(StringUtil.isNumber(split[0])) {
+					g.setId(Integer.valueOf(split[0]));
+				}
+				if(StringUtil.hasText(split[1])) {
+					g.setName(split[1]);
+				}
+				if(StringUtil.hasText(split[2])) {
+					BigDecimal substring = BigDecimal.valueOf(Double.parseDouble(split[2].substring(1)));
+					if(StringUtil.isNumber(split[2].substring(1))) {
+						g.setPrice(substring);
+					}
+				}
+				if(StringUtil.hasText(split[3])) {
+					if(StringUtil.isNumber(split[3].substring(0,split[3].length()-1))) {
+						g.setBaifen(Integer.valueOf(split[3].substring(0, split[3].length()-1)));
+					}
+				}
+				
+				redisTemplate.opsForList().leftPush("good_list", g);
+			}
 		
-		for (int i = 1; i <= 106; i++) {
-			Goods good = new Goods();
-			good.setId(i);
-			good.setName("苹果");
-			good.setPrice(i+1.0);
-			good.setBaifen("80");
-			list.add(good);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		Long goods = redisTemplate.opsForList().leftPush("good_list", list);
 		
-		
-//		for (String string2 : split) {
-//			
-//			redisTemplate.opsForList().leftPush("good_list", string2);
-//		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void RedisZset() {
-		String string = StreamUtil.readTextFile(new File("E:\\aaa.txt"));
-		String[] split = string.split("==");
-		
-		for (int i = 1; i <= 106; i++) {
-			Goods good = new Goods();
-			good.setId(i);
-			good.setName("苹果");
-			good.setPrice(i+1.0);
-			good.setBaifen("80");
-			redisTemplate.opsForZSet().add("good_zset", good,i);
+		File file = new File("src/test/resources/aaa.txt");
+		try {
+			InputStream is = new FileInputStream(file);
+			List<String> readTextForLine = StreamUtil.readTextForLine(is);
+			
+			for (String string : readTextForLine) {
+				System.out.println(string);
+				Goods g = new Goods();
+				String[] split = string.split("==");
+				if(StringUtil.isNumber(split[0])) {							
+					g.setId(Integer.valueOf(split[0]));
+				}
+				if(StringUtil.hasText(split[1])) {
+					g.setName(split[1]);
+				}
+				if(StringUtil.hasText(split[2])) {
+					BigDecimal substring = BigDecimal.valueOf(Double.parseDouble(split[2].substring(1)));
+					if(StringUtil.isNumber(split[2].substring(1))){
+						g.setPrice(substring);
+					}	
+				}
+				if(StringUtil.hasText(split[3])) {
+					if(StringUtil.isNumber(split[3].substring(0,split[3].length()-1))){
+						g.setBaifen(Integer.valueOf(split[3].substring(0,split[3].length()-1)));
+					}
+				}
+				
+				redisTemplate.opsForZSet().add("goods_zset", g, Integer.valueOf(split[3].substring(0,split[3].length()-1)));			
+			}		
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-//		for (String string2 : split) {
-//			
-//			redisTemplate.opsForZSet().add("good_zset", string2);
-//		}
+		
 	}
+	
+	
 }

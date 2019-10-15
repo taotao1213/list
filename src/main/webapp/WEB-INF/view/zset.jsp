@@ -23,8 +23,8 @@
 			<td>${l.baifen }</td>
 		</tr>
 	</c:forEach>
-	<a href="${pageContext.request.contextPath }/findAllZset?page=${prePage}"></a>
-	<a href="${pageContext.request.contextPath }/findAllZset?page=${nextPage}"></a>
 </table>
+	<a href="${pageContext.request.contextPath }/findAllZset?page=${prePage}">上一页</a>
+	<a href="${pageContext.request.contextPath }/findAllZset?page=${nextPage}">下一页</a>
 </body>
 </html>

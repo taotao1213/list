@@ -14,9 +14,9 @@ public class Goods implements Serializable{
 
 	private int id;
 	private String name;
-//	private BigDecimal price;
-	private Double price;
-	private String baifen;
+	private BigDecimal price;
+//	private Double price;
+	private Integer baifen;
 	@Override
 	public String toString() {
 		return "Goods [id=" + id + ", name=" + name + ", price=" + price + ", baifen=" + baifen + "]";
@@ -33,25 +33,26 @@ public class Goods implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-//	public BigDecimal getPrice() {
+	public BigDecimal getPrice() {
+		return price;
+	}
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+	public Integer getBaifen() {
+		return baifen;
+	}
+	public void setBaifen(Integer baifen) {
+		this.baifen = baifen;
+	}
+	
+//	public Double getPrice() {
 //		return price;
 //	}
-//	public void setPrice(BigDecimal price) {
+//	public void setPrice(Double price) {
 //		this.price = price;
 //	}
 	
-	public Double getPrice() {
-		return price;
-	}
-	public void setPrice(Double price) {
-		this.price = price;
-	}
 	
-	public String getBaifen() {
-		return baifen;
-	}
-	public void setBaifen(String baifen) {
-		this.baifen = baifen;
-	}
 	
 }

@@ -18,7 +18,16 @@ public class GoodsController {
 	@Autowired
 	RedisTemplate redisTemplate;
 	
-	
+	/**
+	 * 
+	 * @Title: getGoodsList 
+	 * @Description: list 集合查看数据
+	 * @param m
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("findAll")
 	public String getGoodsList(Model m,@RequestParam(defaultValue = "1")Integer page,
 			@RequestParam(defaultValue = "10")Integer pageSize) {
@@ -38,12 +47,21 @@ public class GoodsController {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @Title: getGoodsZset 
+	 * @Description: Zset 集合查看数据
+	 * @param m
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 * @return: String
+	 */
 	@RequestMapping("findAllZset")
 	public String getGoodsZset(Model m,@RequestParam(defaultValue = "1")Integer page,
 			@RequestParam(defaultValue = "10")Integer pageSize) {
 		
-		Long list = redisTemplate.opsForZSet().removeRange("good_zset", (page-1)*pageSize, (page-1)*pageSize+pageSize-1);
+		Set list = redisTemplate.opsForZSet().reverseRange("goods_zset", (page-1)*pageSize, (page-1)*pageSize+pageSize-1);
 		m.addAttribute("list", list);
 		if(page!=1) {
 			m.addAttribute("prePage", page-1);
